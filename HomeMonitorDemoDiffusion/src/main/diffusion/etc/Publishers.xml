@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<publishers>
+
+	<!-- Associate the example publisher class to a publisher-name. NB: The 
+		publisher name is referenced a few times in this example, so changing it 
+		here mandates doing so elsewhere. -->
+	<publisher name="SensorsPublisher">
+		<class>com.push.SensorsPublisher</class>
+	</publisher>	
+	<!-- The Diffusion Publisher is required for the System Publisher and the 
+		Introspector <publisher name="Diffusion"> <topics>Diffusion</topics> <class>com.pushtechnology.diffusion.publishers.diffusion.DiffusionPublisher</class> 
+		<enabled>true</enabled> <start>true</start> <topic-aliasing>true</topic-aliasing> 
+		<property name="JMXAdapter.enabled">true</property> <property name="JMXAdapter.refreshFrequency">3000</property> 
+		</publisher> -->
+</publishers>

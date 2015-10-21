@@ -1,0 +1,59 @@
+body {
+	background: #fff url(background.gif);
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	font-family: Georgia, serif; 
+	color: #fff;
+}
+
+#MessagesContainer {
+	background: #0969A1; 
+	padding: 26px; 
+	margin: 10px;
+	border-radius: 15px; 
+	-moz-border-radius: 15px;
+	text-align: left;
+}
+
+#MessagesContainer h1 { 
+	font-size: 25px; 
+	font-style: italic; 
+	margin-top: 0; 
+	text-shadow: 0px 1px 3px #000;
+} 
+
+#Messages {
+	height:  500px; 
+	margin: 0 20px 20px;
+	overflow-y: scroll; 
+}
+
+#MessagesControls { 
+	padding: 15px 15px 5px; 
+	border-radius: 8px; 
+	-moz-border-radius: 8px;
+	background: #3D9AD1; 
+}
+#MessagesControls input { 
+	padding: 3px; 
+	margin: 0 0 8px; 
+	border: 3px solid #0C6899; 
+	border-radius: 3px; 
+}
+
+.ConnectionDetails { 
+	color: #ddd;  
+	font-size: 80%;
+	font-style:italic;
+	text-shadow: 1px 1px 1px #000; 
+}
+
+.ConnectionDetails p { 
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.floatLeft { float: left; }
+.floatRight { float: right; }
+.clearFloat { clear: both;}

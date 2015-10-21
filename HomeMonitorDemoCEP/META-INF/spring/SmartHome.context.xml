@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:wlevs="http://www.bea.com/ns/wlevs/spring" xmlns:jdbc="http://www.oracle.com/ns/ocep/jdbc"
+	xmlns:spatial="http://www.oracle.com/ns/ocep/spatial"
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/osgi
+  http://www.springframework.org/schema/osgi/spring-osgi.xsd
+  http://www.bea.com/ns/wlevs/spring
+  http://www.bea.com/ns/wlevs/spring/spring-wlevs-v11_1_1_6.xsd
+  http://www.oracle.com/ns/ocep/jdbc
+  http://www.oracle.com/ns/ocep/jdbc/ocep-jdbc.xsd
+  http://www.oracle.com/ns/ocep/spatial
+  http://www.oracle.com/ns/ocep/spatial/ocep-spatial.xsd">
+
+	<wlevs:event-type-repository>
+		<wlevs:event-type type-name="LightReadingEvent">
+			<wlevs:class>com.oracle.smarthome.cep.LightReadingEvent</wlevs:class>
+		</wlevs:event-type>
+
+		<wlevs:event-type type-name="HeatReadingEvent">
+			<wlevs:class>com.oracle.smarthome.cep.HeatReadingEvent</wlevs:class>
+		</wlevs:event-type>
+
+		<wlevs:event-type type-name="LightControlEvent">
+			<wlevs:class>com.oracle.smarthome.cep.LightControlEvent</wlevs:class>
+		</wlevs:event-type>
+
+		<wlevs:event-type type-name="HeatControlEvent">
+			<wlevs:class>com.oracle.smarthome.cep.HeatControlEvent</wlevs:class>
+		</wlevs:event-type>
+
+		<wlevs:event-type type-name="ThresholdEvent">
+			<wlevs:class>com.oracle.smarthome.cep.ThresholdEvent</wlevs:class>
+		</wlevs:event-type>
+	</wlevs:event-type-repository>
+
+	<wlevs:processor id="lightProcessor">
+		<wlevs:listener ref="lightOutputChannel" />
+		<wlevs:cache-source ref="thresholdCache" />
+	</wlevs:processor>
+	<wlevs:processor id="heatProcessor">
+		<wlevs:listener ref="heatOutputChannel" />
+		<wlevs:cache-source ref="thresholdCache" />
+	</wlevs:processor>
+
+	<wlevs:channel id="thresholdInputChannel" event-type="ThresholdEvent"
+		manageable="true">
+		<wlevs:listener ref="thresholdCache" />
+	</wlevs:channel>
+	<wlevs:channel id="lightInputChannel" event-type="LightReadingEvent"
+		manageable="true">
+		<wlevs:listener ref="lightProcessor" />
+	</wlevs:channel>
+	<wlevs:channel id="heatInputChannel" event-type="HeatReadingEvent"
+		manageable="true">
+		<wlevs:listener ref="heatProcessor" />
+	</wlevs:channel>
+
+	<wlevs:channel id="lightOutputChannel" event-type="LightControlEvent"
+		manageable="true">
+		<wlevs:listener ref="lightControlAdapter" />
+	</wlevs:channel>
+	<wlevs:channel id="heatOutputChannel" event-type="HeatControlEvent"
+		manageable="true">
+		<wlevs:listener ref="heatControlAdapter" />
+	</wlevs:channel>
+
+	<wlevs:adapter id="heatAdapter" class="com.oracle.smarthome.cep.HeatAdapter">
+		<wlevs:listener ref="heatInputChannel" />
+	</wlevs:adapter>
+
+	<wlevs:adapter id="lightAdapter" class="com.oracle.smarthome.cep.LightAdapter">
+		<wlevs:listener ref="lightInputChannel" />
+	</wlevs:adapter>
+	
+	<wlevs:adapter id="thresholdAdapter"
+		class="com.oracle.smarthome.cep.ThresholdAdapter">
+		<wlevs:listener ref="thresholdInputChannel" />
+	</wlevs:adapter>
+
+	<wlevs:adapter id="lightControlAdapter"
+		class="com.oracle.smarthome.cep.LightControlAdapter">
+	</wlevs:adapter>
+
+	<wlevs:adapter id="heatControlAdapter"
+		class="com.oracle.smarthome.cep.HeatControlAdapter">
+	</wlevs:adapter>
+
+	<wlevs:event-bean id="diffusionAdapter" class="com.oracle.smarthome.cep.DiffusionAdapter">
+		<wlevs:instance-property name="lightAdapter" ref="lightAdapter"/>
+		<wlevs:instance-property name="heatAdapter" ref="heatAdapter"/>
+		<wlevs:instance-property name="thresholdAdapter" ref="thresholdAdapter"/>
+		<wlevs:instance-property name="lightControlAdapter" ref="lightControlAdapter"/>
+		<wlevs:instance-property name="heatControlAdapter" ref="heatControlAdapter"/>
+	</wlevs:event-bean>
+
+
+	<wlevs:caching-system id="thresholdCachingSystem" />
+	<wlevs:cache id="thresholdCache" value-type="ThresholdEvent"
+		key-properties="sensorId">
+		<wlevs:caching-system ref="thresholdCachingSystem" />
+	</wlevs:cache>
+</beans>

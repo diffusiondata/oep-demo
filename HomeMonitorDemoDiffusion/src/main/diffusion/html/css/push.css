@@ -1,0 +1,265 @@
+h1,h2,h3,h4 {
+	text-align: center;
+	font-family: verdana, helvetica, arial, sans-serif;
+}
+
+img.centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+#floor-plan {
+	margin: absolute;
+	position: absolute;
+	width: 900px;
+	height: 500px;
+	top: 0;
+	left: 450px;
+	bottom: 0;
+	right: 0;
+	top: 0;
+	z-index: -1;
+}
+
+#graph {
+	position: absolute;
+	top: 25px;
+	left: 25px;
+	bottom: 0;
+	right: 0;
+	width: 425px;
+	height: 800px;
+}
+
+#y_axis {
+	position: absolute;
+	left: -40px;
+	top: 0;
+	bottom: 0;
+	width: 40px;
+}
+
+#timeline {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	left: 100px;
+}
+
+#thermometer0 {
+	position: absolute;
+	top: 50px;
+	left: 135px;
+	bottom: 0;
+	right: 0;
+}
+
+#thermometer1 {
+	position: absolute;
+	top: 30px;
+	left: 310px;
+	bottom: 0;
+	right: 0;
+}
+
+#thermometer2 {
+	position: absolute;
+	top: 250px;
+	left: 220px;
+	bottom: 0;
+	right: 0;
+}
+
+#thermometer3 {
+	position: absolute;
+	top: 250px;
+	left: 550px;
+	bottom: 0;
+	right: 0;
+}
+
+#thermometer4 {
+	position: absolute;
+	top: 150px;
+	left: 690px;
+	bottom: 0;
+	right: 0;
+}
+
+#thermometer5 {
+	position: absolute;
+	top: 375px;
+	left: 420px;
+	bottom: 0;
+	right: 0;
+}
+
+#light0-on,#light0-off {
+	position: absolute;
+	top: 50px;
+	left: 170px;
+	bottom: 0;
+	right: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#light1-on,#light1-off {
+	position: absolute;
+	top: 40px;
+	left: 350px;
+	bottom: 0;
+	right: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#light2-on,#light2-off {
+	position: absolute;
+	top: 260px;
+	left: 260px;
+	bottom: 0;
+	right: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#light3-on,#light3-off {
+	position: absolute;
+	top: 260px;
+	left: 595px;
+	bottom: 0;
+	right: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#light4-on,#light4-off {
+	position: absolute;
+	top: 150px;
+	left: 625px;
+	bottom: 0;
+	right: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#person0 {
+	position: absolute;
+	top: 130px;
+	left: 190px;
+	bottom: 0;
+	right: 0;
+}
+
+#person1 {
+	position: absolute;
+	top: 120px;
+	left: 370px;
+	bottom: 0;
+	right: 0;
+}
+
+#person2 {
+	position: absolute;
+	top: 350px;
+	left: 280px;
+	bottom: 0;
+	right: 0;
+}
+
+#person3 {
+	position: absolute;
+	top: 330px;
+	left: 610px;
+	bottom: 0;
+	right: 0;
+}
+
+#person4 {
+	position: absolute;
+	top: 240px;
+	left: 695px;
+	bottom: 0;
+	right: 0;
+}
+
+#controls {
+	position: absolute;
+	top: 530px;
+	left: 420px;
+	width: 960px;
+	height: 260px;
+	border: 2px solid;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888888;
+	z-index: -1;
+}
+
+#auto-mode {
+	float: left;
+	width: 210px;
+	height: 235px;
+	border: 2px solid;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888888;
+	margin: 10px;
+}
+
+#light-switch {
+	float: left;
+	width: 210px;
+	height: 235px;
+	border: 2px solid;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888888;
+	margin: 10px;
+	padding-left: 10px;
+}
+
+#heater-switch {
+	float: left;
+	width: 210px;
+	height: 235px;
+	border: 2px solid;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888888;
+	margin: 10px;
+	padding-left: 10px;
+}
+
+#device-fire {
+	float: left;
+	width: 210px;
+	height: 235px;
+	border: 2px solid;
+	border-radius: 10px;
+	box-shadow: 10px 10px 5px #888888;
+	margin: 10px;
+}
+
+#footer {
+	position: fixed;
+	z-index: 0;
+	height: 51px;
+	width: 95%;
+	bottom: 0px;
+	padding: 5px;
+	color: #555;
+}
+
+#diffusion {
+	float: left;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+#cep {
+	float: right;
+}

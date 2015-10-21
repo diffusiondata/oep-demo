@@ -1,0 +1,365 @@
+<!doctype html>
+
+<head>
+<title>Smart Home Demo - Oracle CEP / Diffusion</title>
+<link type="text/css" rel="stylesheet" href="css/graph.css">
+<link type="text/css" rel="stylesheet" href="css/lines.css">
+<link type="text/css" rel="stylesheet" href="css/detail.css">
+<link type="text/css" rel="stylesheet" href="css/legend.css">
+<link type="text/css" rel="stylesheet" href="css/push.css">
+
+<script type="text/javascript" src="js/d3.v2.js"></script>
+<script type="text/javascript" src="js/rickshaw.js"></script>
+<script type="text/javascript" src="js/RGraph.common.core.js"></script>
+<script type="text/javascript" src="js/RGraph.thermometer.js"></script>
+<script type="text/javascript"
+	src="/lib/DIFFUSION/diffusion.js"></script>
+
+
+<script>
+	var mode = "auto";
+	var light = "off";
+	var heat = "off";
+	var topicName = "Sensors//";
+	var graph;
+	var seriesData = [ [], [], [], [], [], [], [] ];
+
+	function onDataEvent(webClientMessage) {
+		var fields = webClientMessage.getFields(0);
+		var topic = webClientMessage.getTopic();
+
+		var split = topic.split("/");
+		var type = split[1];
+		var sensor = split[2];
+		var room = split[3];
+		var now = new Date().getTime() / 1000;
+
+		if (type == "Readings") {
+			if (sensor == "Temp") {
+				setTemp(room, parseFloat(fields[0]));
+			} else if (sensor == "Light") {
+				setLight(parseFloat(fields[0]));
+			} else if (sensor == "PIR") {
+				setPerson(room, parseBoolean(fields[0]));
+			}
+		} else if (type == "Control") {
+			if (sensor == "Light") {
+				lights(fields[0]);
+			} else {
+				heater(fields[0]);
+			}
+		}
+	}
+
+	function setTemp(room, value) {
+		var roomId;
+		if (room == "Bedroom 1") {
+			roomId = 0;
+		} else if (room == "Bedroom 2") {
+			roomId = 1;
+		} else if (room == "Bedroom 3") {
+			roomId = 2;
+		} else if (room == "Kitchen") {
+			roomId = 3;
+		} else if (room == "Living Room") {
+			roomId = 4;
+		} else if (room == "Outside") {
+			roomId = 5;
+		}
+
+		new RGraph.Thermometer('thermometer' + roomId, 10, 40, value).Draw();
+
+		var now = new Date().getTime() / 1000;
+
+		var len = seriesData[roomId].push({
+			x : now,
+			y : value
+		});
+
+		if (len > 1000) {
+			seriesData[roomId].shift();
+		}
+		graph.update();
+	}
+
+	function setLight(value) {
+		var now = new Date().getTime() / 1000;
+		var lenn = seriesData[6].push({
+			x : now,
+			y : value
+		});
+
+		if (len > 1000) {
+			seriesData[6].shift();
+		}
+		graph.update();
+	}
+
+	function setPerson(room, value) {
+		var roomId;
+		if (room == "Bedroom 1") {
+			roomId = 0;
+		} else if (room == "Bedroom 2") {
+			roomId = 1;
+		} else if (room == "Bedroom 3") {
+			roomId = 2;
+		} else if (room == "Kitchen") {
+			roomId = 3;
+		} else if (room == "Living Room") {
+			roomId = 4;
+		} else if (room == "Outside") {
+			roomId = 5;
+		}
+
+		var onState = "visible";
+		if (value) {
+			onState = "visible";
+		}
+		var pic = document.getElementById("person" + roomId);
+		pic.style.visibility = onState;
+	}
+
+	function connected(isConnected) {
+		DiffusionClient.trace("Connected to Diffusion Server");
+		DiffusionClient.subscribe(topicName);
+	}
+
+	function initGraph() {
+		for ( var i = 0; i < seriesData.length; i++) {
+			seriesData[i].push({
+				x : new Date().getTime() / 1000,
+				y : 15
+			});
+		}
+		var palette = new Rickshaw.Color.Palette({
+			scheme : "munin"
+		});
+
+		graph = new Rickshaw.Graph({
+			element : document.getElementById("chart"),
+			renderer : 'line',
+			series : [ {
+				data : seriesData[0],
+				color : palette.color(),
+				name : 'Bedroom 1'
+			}, {
+				data : seriesData[1],
+				color : palette.color(),
+				name : 'Bedroom 2'
+			}, {
+				data : seriesData[2],
+				color : palette.color(),
+				name : 'Bedroom 3'
+			}, {
+				data : seriesData[3],
+				color : palette.color(),
+				name : 'Kitchen'
+			}, {
+				data : seriesData[4],
+				color : palette.color(),
+				name : 'Living Room'
+			}, {
+				data : seriesData[5],
+				color : palette.color(),
+				name : 'Outside'
+			}, {
+				data : seriesData[6],
+				color : palette.color(),
+				name : 'Light'
+			} ]
+		});
+
+		new Rickshaw.Graph.Axis.Y({
+			element : document.getElementById('y_axis'),
+			graph : graph,
+			orientation : 'left',
+			tickFormat : Rickshaw.Fixtures.Number.formatKMBT
+		});
+
+		new Rickshaw.Graph.Axis.Time({
+			graph : graph
+		});
+
+		new Rickshaw.Graph.HoverDetail({
+			graph : graph
+		});
+
+		var legend = new Rickshaw.Graph.Legend({
+			element : document.querySelector('#legend'),
+			graph : graph
+		});
+
+		graph.render();
+	}
+
+	function autoMode() {
+		if (mode == "auto") {
+			mode = "manual";
+			document.getElementById("auto-mode-display").innerHTML = "Manual";
+			document.getElementById("auto-mode-icon").src = "images/auto-off.png";
+			document.getElementById("light-switch-button").style.visibility = "visible";
+			document.getElementById("heater-switch-button").style.visibility = "visible";
+		} else {
+			mode = "auto";
+			document.getElementById("auto-mode-display").innerHTML = "Automatic";
+			document.getElementById("auto-mode-icon").src = "images/auto-on.png";
+			document.getElementById("light-switch-button").style.visibility = "hidden";
+			document.getElementById("heater-switch-button").style.visibility = "hidden";
+		}
+		thresholds();
+	}
+
+	function lights(state) {
+		var onState = "hidden";
+		var offState = "visible";
+		if (state == "on") {
+			light = true;
+			var onState = "visible";
+			var offState = "hidden";
+			document.getElementById("light-switch-button").src = "images/auto-on.png";
+		} else {
+			light = false;
+			document.getElementById("light-switch-button").src = "images/auto-off.png";
+		}
+
+		for ( var i = 0; i < 5; i++) {
+			document.getElementById("light" + i + "-on").style.visibility = onState;
+			document.getElementById("light" + i + "-off").style.visibility = offState;
+		}
+	}
+
+	function heater(state) {
+		if (state == "on") {
+			heat = true;
+			document.getElementById("fire").src = "images/heat-on.png";
+			document.getElementById("heater-switch-button").src = "images/auto-on.png";
+		} else {
+			document.getElementById("fire").src = "images/heat-off.png";
+			document.getElementById("heater-switch-button").src = "images/auto-off.png";
+			heat = false;
+		}
+	}
+
+	function thresholds() {
+		var ttl = document.getElementById("ttl").value;
+		var tth = document.getElementById("tth").value;
+		var tte;
+		var tl = document.getElementById("tl").value;
+		var topicMessage = new TopicMessage("Sensors/Control");
+		topicMessage.putFields(mode, ttl, tth, tte, tl);
+		DiffusionClient.sendTopicMessage(topicMessage);
+	}
+
+	function lightSwitch() {
+		var command = "on";
+		if (light) {
+			command = "off";
+		}
+		var topicMessage = new TopicMessage("Sensors/Control/Light", command);
+		DiffusionClient.sendTopicMessage(topicMessage);
+	}
+
+	function heaterSwitch() {
+		var command = "on";
+		if (heat) {
+			command = "off";
+		}
+		var topicMessage = new TopicMessage("Sensors/Control/Heater", command);
+		DiffusionClient.sendTopicMessage(topicMessage);
+	}
+
+	function init() {
+		lights("on");
+		heater("on");
+
+		var connectionDetails = {
+			onDataFunction : onDataEvent,
+			onCallbackFunction : connected
+		};
+
+		DiffusionClient.connect(connectionDetails);
+		/* DiffusionClient.setDebugging(true); */
+
+		initGraph();
+		lights("off");
+		heater("off");
+	}
+
+	function parseBoolean(value) {
+		return value == "true" ? true : false;
+	}
+</script>
+</head>
+<body onload="init()">
+	<div id="main">
+		<div id="floor-plan">
+			<img src="images/floor_plan.png" />
+			<canvas id="thermometer0" width="70" height="150"></canvas>
+			<canvas id="thermometer1" width="70" height="150"></canvas>
+			<canvas id="thermometer2" width="70" height="150"></canvas>
+			<canvas id="thermometer3" width="70" height="150"></canvas>
+			<canvas id="thermometer4" width="70" height="150"></canvas>
+			<canvas id="thermometer5" width="70" height="150"></canvas>
+			<img id="light0-on" src="images/light-on.png" /> <img id="light1-on"
+				src="images/light-on.png" /> <img id="light2-on"
+				src="images/light-on.png" /> <img id="light3-on"
+				src="images/light-on.png" /> <img id="light4-on"
+				src="images/light-on.png" /> <img id="light0-off"
+				src="images/light-off.png" /> <img id="light1-off"
+				src="images/light-off.png" /> <img id="light2-off"
+				src="images/light-off.png" /> <img id="light3-off"
+				src="images/light-off.png" /> <img id="light4-off"
+				src="images/light-off.png" /> <img id="person0"
+				src="images/person.png" style="visibility: hidden;" /> <img
+				id="person1" src="images/person.png" style="visibility: hidden;" />
+			<img id="person2" src="images/person.png" style="visibility: hidden;" />
+			<img id="person3" src="images/person.png" style="visibility: hidden;" />
+			<img id="person4" src="images/person.png" style="visibility: hidden;" />
+		</div>
+		<div id="graph">
+			<div id="y_axis"></div>
+			<div id="chart"></div>
+			<div id="legend"></div>
+		</div>
+		<div id="controls">
+			<div id="auto-mode">
+				<h3>Mode</h3>
+				<h4 id="auto-mode-display">Automatic</h4>
+				<img class="centered" id="auto-mode-icon" width="128" height="128"
+					src="images/auto-on.png" onclick="autoMode()" />
+			</div>
+			<div id="light-switch">
+				<h4>Lighting Control</h4>
+				<img class="centered hidden" id="light-switch-button" width="64"
+					height="64" src="images/auto-off.png" onclick="lightSwitch()" />
+				<p />
+				<label for="tth">Threshold : </label><input id="tl" type="number"
+					value="20" min="0" max="150" onChange="thresholds()" />
+			</div>
+			<div id="heater-switch">
+				<h4>Heating Control</h4>
+				<img class="centered hidden" id="heater-switch-button" width="64"
+					height="64" src="images/auto-off.png" onclick="heaterSwitch()" />
+				<p />
+				<label for="tth">Threshold High : </label><input id="tth"
+					type="number" value="30" min="0" max="40" onChange="thresholds()" />
+				<p />
+				<label for="ttl">Threshold Low : </label><input id="ttl"
+					type="number" value="23" min="0" max="40" onChange="thresholds()" />
+			</div>
+			<div id="device-fire">
+				<h3 align="center">Heating</h3>
+				<img class="centered" id="fire" src="images/heat-off.png" />
+			</div>
+		</div>
+	</div>
+
+	<div id="footer">
+		<a id="diffusion" href="http://www.pushtechnology.com"> <img
+			src="images/diffusion.png" />
+		</a> <a id="cep"
+			href="http://www.oracle.com/technetwork/middleware/complex-event-processing/overview/index.html">
+			<img src="images/cep.gif" />
+		</a>
+	</div>
+</body>

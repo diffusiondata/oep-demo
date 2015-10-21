@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.push.home-monitor-demo</groupId>
+	<artifactId>home-monitor-demo-cep</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<DIFFUSION_HOME>/Users/andy/push/diffusion/Diffusion5.5.3_01</DIFFUSION_HOME>
+	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>push-repository</id>
+			<url>http://download.pushtechnology.com/maven</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.pushtechnology</groupId>
+				<artifactId>dar-maven-plugin</artifactId>
+				<version>1.0</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.push.ClientRunner</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.pushtechnology</groupId>
+			<artifactId>diffusion</artifactId>
+			<version>5.5.3</version>
+			<scope>system</scope>
+			<systemPath>${DIFFUSION_HOME}/lib/diffusion.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

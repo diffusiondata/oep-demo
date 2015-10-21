@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<!-- Load the Diffusion client library -->
+	<script type="text/javascript" src="/lib/DIFFUSION/diffusion.uncompressed.js"></script>
+
+	<!-- Load the JS for this demonstration -->
+	<script type="text/javascript" src="echo.js"></script>
+	
+	<!-- Load the CSS for this demo -->
+	<link rel="stylesheet" type="text/css" href="echo.css"></link>
+	
+	<title>A shared Diffusion notice board</title>
+</head>
+
+<body onload="javascript: onLoad();">
+
+	<div id="MessagesContainer">
+		<h1>Diffusion Echo Publisher demo</h1>
+		<div id="Messages">
+			<p id="MessagesBox_intro">
+				Messages from this and other Diffusion clients will appear here.<br />
+			</p>
+		</div>
+		
+		<div id="MessagesControls">
+		
+			<input type="text" id="MessageToSend" placeholder="Connecting to Diffusion" style="width: 100%;" onKeyPress="return submitEnter(this,event)" />
+
+			<div class="ConnectionDetails">
+				<p id="ClientID" class="floatLeft"></p>		
+				<p class="floatRight" style="cursor: pointer" onclick="sendInvite()">Email an invitation to this page</p>
+				<br class="clearFloat" />
+			</div>
+			
+		</div>
+	</div>
+
+	<div id="DiffusionContainer"><!-- Necessary sacrifice to the Diffusion Tiki gods  --></div>
+
+</body>
+
+</html>
