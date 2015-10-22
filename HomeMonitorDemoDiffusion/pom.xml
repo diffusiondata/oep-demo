@@ -8,7 +8,7 @@
 	<packaging>dar</packaging>
 
 	<properties>
-		<DIFFUSION_HOME>/Users/andy/push/diffusion/Diffusion5.5.3_01</DIFFUSION_HOME>
+        <DIFFUSION_HOME>/Users/Peter/Dev/Push/Diffusion/R55/build/target/5.5.7_dev/release/Diffusion5.5.7_dev</DIFFUSION_HOME>
 	</properties>
 
 	<pluginRepositories>
