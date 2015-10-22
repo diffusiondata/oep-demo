@@ -1,7 +1,20 @@
 <!doctype html>
 
 <head>
+
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="&copy; 2012 Push Technology" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="X-UA-Compatible" value="IE=9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, width = 900">
+
+
 <title>Smart Home Demo - Oracle CEP / Diffusion</title>
+
+<!--@DiffusionTag type="Include" file="../../../html/includes/header.tpl" -->
+
+
 <link type="text/css" rel="stylesheet" href="css/graph.css">
 <link type="text/css" rel="stylesheet" href="css/lines.css">
 <link type="text/css" rel="stylesheet" href="css/detail.css">
@@ -12,8 +25,7 @@
 <script type="text/javascript" src="js/rickshaw.js"></script>
 <script type="text/javascript" src="js/RGraph.common.core.js"></script>
 <script type="text/javascript" src="js/RGraph.thermometer.js"></script>
-<script type="text/javascript"
-	src="/lib/DIFFUSION/diffusion.js"></script>
+<script type="text/javascript" src="/lib/DIFFUSION/diffusion.js"></script>
 
 
 <script>
@@ -290,76 +302,99 @@
 	}
 </script>
 </head>
-<body onload="init()">
-	<div id="main">
-		<div id="floor-plan">
-			<img src="images/floor_plan.png" />
-			<canvas id="thermometer0" width="70" height="150"></canvas>
-			<canvas id="thermometer1" width="70" height="150"></canvas>
-			<canvas id="thermometer2" width="70" height="150"></canvas>
-			<canvas id="thermometer3" width="70" height="150"></canvas>
-			<canvas id="thermometer4" width="70" height="150"></canvas>
-			<canvas id="thermometer5" width="70" height="150"></canvas>
-			<img id="light0-on" src="images/light-on.png" /> <img id="light1-on"
-				src="images/light-on.png" /> <img id="light2-on"
-				src="images/light-on.png" /> <img id="light3-on"
-				src="images/light-on.png" /> <img id="light4-on"
-				src="images/light-on.png" /> <img id="light0-off"
-				src="images/light-off.png" /> <img id="light1-off"
-				src="images/light-off.png" /> <img id="light2-off"
-				src="images/light-off.png" /> <img id="light3-off"
-				src="images/light-off.png" /> <img id="light4-off"
-				src="images/light-off.png" /> <img id="person0"
-				src="images/person.png" style="visibility: hidden;" /> <img
-				id="person1" src="images/person.png" style="visibility: hidden;" />
-			<img id="person2" src="images/person.png" style="visibility: hidden;" />
-			<img id="person3" src="images/person.png" style="visibility: hidden;" />
-			<img id="person4" src="images/person.png" style="visibility: hidden;" />
-		</div>
-		<div id="graph">
-			<div id="y_axis"></div>
-			<div id="chart"></div>
-			<div id="legend"></div>
-		</div>
-		<div id="controls">
-			<div id="auto-mode">
-				<h3>Mode</h3>
-				<h4 id="auto-mode-display">Automatic</h4>
-				<img class="centered" id="auto-mode-icon" width="128" height="128"
-					src="images/auto-on.png" onclick="autoMode()" />
-			</div>
-			<div id="light-switch">
-				<h4>Lighting Control</h4>
-				<img class="centered hidden" id="light-switch-button" width="64"
-					height="64" src="images/auto-off.png" onclick="lightSwitch()" />
-				<p />
-				<label for="tth">Threshold : </label><input id="tl" type="number"
-					value="20" min="0" max="150" onChange="thresholds()" />
-			</div>
-			<div id="heater-switch">
-				<h4>Heating Control</h4>
-				<img class="centered hidden" id="heater-switch-button" width="64"
-					height="64" src="images/auto-off.png" onclick="heaterSwitch()" />
-				<p />
-				<label for="tth">Threshold High : </label><input id="tth"
-					type="number" value="30" min="0" max="40" onChange="thresholds()" />
-				<p />
-				<label for="ttl">Threshold Low : </label><input id="ttl"
-					type="number" value="23" min="0" max="40" onChange="thresholds()" />
-			</div>
-			<div id="device-fire">
-				<h3 align="center">Heating</h3>
-				<img class="centered" id="fire" src="images/heat-off.png" />
-			</div>
-		</div>
+<body onload="init();" style="padding-top: 10px; max-width: none;">
+    <div id="demo" class="page-container">
+    
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="/" title=Diffusion>
+                        <img src="/lib/img/logos/diffusion.png" height=25 style="height:25px;"></img>
+                    </a>
+                    <ul class="nav">
+                        <li class="active">
+                            <a href="http://www.oracle.com/technetwork/middleware/complex-event-processing/overview/index.html" target="_blank" style="padding-top: 0;">
+                                <img src="images/cep.gif" />
+                            </a>
+                        </li>
+                    </ul>
+                    <a class="pull-right push" href="http://www.pushtechnology.com" title="Push Technology" target=_blank>
+                        <img src="/lib/img/logos/push.png" height=25 style="height:25px;"></img>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="container"> 
+                        <div class="row">
+                            <div class="span12">
+                                <div id="floor-plan">
+                                    <img src="images/floor_plan.png" />
+                                    <canvas id="thermometer0" width="70" height="150"></canvas>
+                                    <canvas id="thermometer1" width="70" height="150"></canvas>
+                                    <canvas id="thermometer2" width="70" height="150"></canvas>
+                                    <canvas id="thermometer3" width="70" height="150"></canvas>
+                                    <canvas id="thermometer4" width="70" height="150"></canvas>
+                                    <canvas id="thermometer5" width="70" height="150"></canvas>
+                                    <img id="light0-on" src="images/light-on.png" /> 
+                                    <img id="light1-on" src="images/light-on.png" /> 
+                                    <img id="light2-on" src="images/light-on.png" /> 
+                                    <img id="light3-on" src="images/light-on.png" /> 
+                                    <img id="light4-on" src="images/light-on.png" /> 
+                                    <img id="light0-off" src="images/light-off.png" /> 
+                                    <img id="light1-off" src="images/light-off.png" /> 
+                                    <img id="light2-off" src="images/light-off.png" /> 
+                                    <img id="light3-off" src="images/light-off.png" /> 
+                                    <img id="light4-off" src="images/light-off.png" /> 
+                                    <img id="person0" src="images/person.png" style="visibility: hidden;" /> 
+                                    <img id="person1" src="images/person.png" style="visibility: hidden;" />
+                                    <img id="person2" src="images/person.png" style="visibility: hidden;" />
+                                    <img id="person3" src="images/person.png" style="visibility: hidden;" />
+                                    <img id="person4" src="images/person.png" style="visibility: hidden;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <div id="graph">
+                                    <div id="y_axis"></div>
+                                    <div id="chart"></div>
+                                    <div id="legend"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div id="control-nav" class="">
+                        <h5>Mode (<span id="auto-mode-display">automatic</span>)</h5>
+                        <img id="auto-mode-icon" width="45" height="45" src="images/auto-on.png" onclick="autoMode()" />
+
+                        <h5>Lighting</h5>
+                        <label for="tth">Threshold : </label>
+                        <input id="tl" type="number" value="20" min="0" max="150" onChange="thresholds()" />
+                        <p />
+                        <img class="hidden" id="light-switch-button" width="40" height="40" src="images/auto-off.png" onclick="lightSwitch()" />
+
+                        <h5>Heating</h5>
+                        <label for="tth">Threshold High : </label>
+                        <input id="tth" type="number" value="30" min="0" max="40" onChange="thresholds()" />
+
+                        <label for="ttl">Threshold Low : </label>
+                        <input id="ttl" type="number" value="23" min="0" max="40" onChange="thresholds()" />
+
+                        <img class="centered" id="fire" src="images/heat-off.png" />
+                        <p />
+                        <img class="centered hidden" id="heater-switch-button" width="40" height="40" src="images/auto-off.png" onclick="heaterSwitch()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-footer-placeholder"></div>
 	</div>
 
-	<div id="footer">
-		<a id="diffusion" href="http://www.pushtechnology.com"> <img
-			src="images/diffusion.png" />
-		</a> <a id="cep"
-			href="http://www.oracle.com/technetwork/middleware/complex-event-processing/overview/index.html">
-			<img src="images/cep.gif" />
-		</a>
-	</div>
+    <!--@DiffusionTag type="Include" file="../../../html/includes/footer.tpl" -->
 </body>

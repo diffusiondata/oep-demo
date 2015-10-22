@@ -14,26 +14,33 @@ img.centered {
 }
 
 #floor-plan {
-	margin: absolute;
-	position: absolute;
-	width: 900px;
-	height: 500px;
-	top: 0;
-	left: 450px;
-	bottom: 0;
-	right: 0;
-	top: 0;
+	position: relative;
 	z-index: -1;
 }
 
+#control-nav {
+    background-image: url('/lib/img/illustrations/Blue.jpg') !important;
+    background-color: #00aeef;
+    background-position: top left;
+    background-repeat: no-repeat;
+    color: #fff;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 0;
+
+    padding: 80px 20px 0;
+
+    max-width: 450px;
+}
+
 #graph {
-	position: absolute;
-	top: 25px;
-	left: 25px;
-	bottom: 0;
-	right: 0;
-	width: 425px;
-	height: 800px;
+
+}
+
+#chart {
+    width: 100%;
 }
 
 #y_axis {
@@ -212,6 +219,10 @@ img.centered {
 	margin: 10px;
 }
 
+#auto-mode-icon {
+    margin-bottom: 15px;
+}
+
 #light-switch {
 	float: left;
 	width: 210px;
@@ -263,3 +274,4 @@ img.centered {
 #cep {
 	float: right;
 }
+
