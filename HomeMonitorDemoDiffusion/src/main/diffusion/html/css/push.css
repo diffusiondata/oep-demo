@@ -36,11 +36,17 @@ img.centered {
 }
 
 #graph {
-
+    position: relative;
+    margin-top: 40px;
 }
 
 #chart {
     width: 100%;
+}
+
+#legend {
+    position: absolute;
+    margin-left: 30px;
 }
 
 #y_axis {

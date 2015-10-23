@@ -4,11 +4,6 @@ div, span, p, td {
 #chart {
 	display: inline-block;
 }
-#legend {
-	display: inline-block;
-	position: relative;
-	left: 8px;
-}
 #legend_container {
 	position: absolute;
 	right: 0;
