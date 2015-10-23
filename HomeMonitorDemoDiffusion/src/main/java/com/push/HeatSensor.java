@@ -23,6 +23,9 @@ public class HeatSensor implements Runnable {
     private final Publisher publisher;
     private final String[] rooms;
 
+    private volatile int min = 10;
+    private volatile int max = 30;
+
     public HeatSensor(Publisher publisher, String... rooms) {
         this.publisher = publisher;
         this.rooms = rooms;
@@ -60,18 +63,23 @@ public class HeatSensor implements Runnable {
         }
     }
 
+    public void setMinMax(int min, int max) {
+        this.min = min;
+        this.max = max;
+    }
+
     public double readValue() {
         double variation = random.nextInt(50) / 10d;
 
         double newTemp = lastTemp + (trend * variation);
 
-        if (newTemp < 10) {
-            newTemp = 10;
-        } else if (newTemp > 30) {
-            newTemp = 30;
+        if (newTemp < min) {
+            newTemp = min;
+        } else if (newTemp > max) {
+            newTemp = max;
         }
 
-        if (random.nextInt(30) == 1) {
+        if (random.nextInt(max) == 1) {
             lastTemp = newTemp;
         }
         return newTemp;

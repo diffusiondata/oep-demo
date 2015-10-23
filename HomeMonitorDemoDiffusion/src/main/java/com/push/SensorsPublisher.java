@@ -3,6 +3,8 @@ package com.push;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import com.pushtechnology.diffusion.api.APIException;
 import com.pushtechnology.diffusion.api.message.TopicMessage;
 import com.pushtechnology.diffusion.api.publisher.Client;
@@ -69,6 +71,15 @@ public class SensorsPublisher extends Publisher {
                     on = false;
                 }
                 heatSensor.heaterOn(on);
+            }
+
+            if (message.getTopicName().equals("sesnsor/Control")) {
+                final List<String> fields = message.asFields();
+                
+                final Integer min = Integer.valueOf(fields.get(0));
+                final Integer max = Integer.valueOf(fields.get(1));
+
+                heatSensor.setMinMax(min, max);
             }
         } catch (APIException e) {
             e.printStackTrace();
