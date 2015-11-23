@@ -73,11 +73,11 @@ public class SensorsPublisher extends Publisher {
                 heatSensor.heaterOn(on);
             }
 
-            if (message.getTopicName().equals("sesnsor/Control")) {
+            if (message.getTopicName().equals("Sensors/Control")) {
                 final List<String> fields = message.asFields();
                 
-                final Integer min = Integer.valueOf(fields.get(0));
-                final Integer max = Integer.valueOf(fields.get(1));
+                final Integer min = Integer.valueOf(fields.get(1));
+                final Integer max = Integer.valueOf(fields.get(2));
 
                 heatSensor.setMinMax(min, max);
             }
