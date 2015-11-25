@@ -187,6 +187,7 @@ var mode = "auto";
 			document.getElementById("light-switch-button").style.visibility = "hidden";
 			document.getElementById("heater-switch-button").style.visibility = "hidden";
 		}
+		
 		thresholds();
 	}
 
@@ -264,9 +265,6 @@ var mode = "auto";
 	}
 
 	function init() {
-		lights("on");
-		heater("on");
-
 		var connectionDetails = {
 			onDataFunction : onDataEvent,
 			onCallbackFunction : connected
