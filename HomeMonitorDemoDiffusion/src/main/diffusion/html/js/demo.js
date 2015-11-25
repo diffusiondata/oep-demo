@@ -28,6 +28,27 @@ var mode = "auto";
 				lights(fields[0]);
 			} else {
 				heater(fields[0]);
+				
+				var ttl = parseInt(fields[1]);
+				
+				if (ttl || ttl == 0) {
+				    document.getElementById("ttl").value = ttl; 
+				    document.getElementById('heat-threshold-low').innerHTML = ttl;
+				}
+				
+				var tth = parseInt(fields[2]);
+				
+				if (tth || tth == 0) {
+				    document.getElementById("tth").value = tth;
+				    document.getElementById('heat-threshold-high').innerHTML = tth;
+				}
+				
+				var tl =  parseInt(fields[4]);
+				
+				if (tl || tl == 0) {
+				    document.getElementById("tl").value = tl;
+				    document.getElementById('lighting-threshold').innerHTML = tl;
+				}
 			}
 		}
 	}
@@ -215,7 +236,7 @@ var mode = "auto";
 			heat = true;
 			document.getElementById("fire").src = "images/heat-on.png";
 			document.getElementById("heater-switch-button").src = "images/auto-on.png";
-		} else {
+		} else if (state == "off") {
 			document.getElementById("fire").src = "images/heat-off.png";
 			document.getElementById("heater-switch-button").src = "images/auto-off.png";
 			heat = false;
@@ -230,20 +251,22 @@ var mode = "auto";
 		var topicMessage = new TopicMessage("Sensors/Control");
 		topicMessage.putFields(mode, ttl, tth, tte, tl);
 
-        console.log(topicMessage);
 		DiffusionClient.sendTopicMessage(topicMessage);
 	}
 
     function lightingThreshold(val) {
         document.getElementById("lighting-threshold").innerHTML = val;
+        thresholds();
     }
 
     function heatThresholdHigh(val) {
         document.getElementById('heat-threshold-high').innerHTML = val;
+        thresholds();
     }
 
     function heatThresholdLow(val) {
         document.getElementById('heat-threshold-low').innerHTML = val;
+        thresholds();
     }
 
 	function lightSwitch() {
@@ -256,6 +279,7 @@ var mode = "auto";
 	}
 
 	function heaterSwitch() {
+	console.log("heater switch", heat);
 		var command = "on";
 		if (heat) {
 			command = "off";
