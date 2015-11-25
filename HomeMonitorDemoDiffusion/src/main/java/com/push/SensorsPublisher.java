@@ -65,6 +65,7 @@ public class SensorsPublisher extends Publisher {
         try {
             Topic topic = getTopic(message.getTopicName());
             topic.publishMessage(message);
+            
             if (message.getTopicName().equals("Sensors/Control/Heater")) {
                 boolean on = true;
                 if (message.asFields().get(0).equals("off")) {

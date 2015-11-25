@@ -12,10 +12,11 @@ import com.pushtechnology.diffusion.api.publisher.Publisher;
 import com.pushtechnology.diffusion.api.topic.Topic;
 
 public class HeatSensor implements Runnable {
-    private static Random RANDOM = new Random(System.currentTimeMillis());
+    private static final Random RANDOM = new Random(System.currentTimeMillis());
+    private static final int MAX_TEMP = 40;
     
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private final ConcurrentMap<String, Double> prevTemps = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Double> prevTemps = new ConcurrentHashMap<String, Double>();
 
     private final Publisher publisher;
     private final String[] rooms;
@@ -73,18 +74,27 @@ public class HeatSensor implements Runnable {
     }
 
     public double readValue(String room) {
-        final double variation = RANDOM.nextInt(50) / 10d;
+        final double variation = (RANDOM.nextInt(50) / 10d) - 1;
         final double prev = prevTemps.get(room);
         
         double newTemp = prev + (trend * variation);
 
-        if (newTemp < min) {
-            newTemp = min;
-        } else if (newTemp > max) {
-            newTemp = max;
+        // Clamp all temperatures to an absolute maximum
+        if (newTemp > MAX_TEMP) {
+        	newTemp = MAX_TEMP;
         }
-
-        prevTemps.replace(room, prev, newTemp);   
+        
+        // When temperatures hit threshold min/max values, clamp prev values 
+        // to ensure they hover around them
+        if (newTemp < min) {
+        	prevTemps.replace(room, prev, (double) min);
+        	newTemp++;
+        } else if (newTemp > max) {
+        	prevTemps.replace(room, prev, (double) max);
+        	newTemp--;
+        } else {
+        	prevTemps.replace(room, prev, newTemp);
+        }
         
         return newTemp;
     }
