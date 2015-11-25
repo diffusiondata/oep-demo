@@ -183,7 +183,9 @@ public class DiffusionAdapter extends ServerConnectionAdapter implements Activat
                 Double ttl = fields.get(1) == null || fields.get(1).trim().equals("") ? null : Double.parseDouble(fields.get(1));
                 Double tth = fields.get(2) == null || fields.get(2).trim().equals("") ? null : Double.parseDouble(fields.get(2));
                 Integer tl = fields.get(4) == null || fields.get(4).trim().equals("") ? null : Integer.parseInt(fields.get(4));
-                thresholdAdapter.sendEvent(mode, ttl, tth, tl);
+                for (Rooms room : Rooms.values()) {
+                	thresholdAdapter.sendEvent(mode, room.toString(), ttl, tth, tl);
+                }
             } else if (topicName.equals("Sensors/Control/Light")) {
                 String command = fields.get(0);
                 System.out.printf("Received Light control event [%s]%n", command);
