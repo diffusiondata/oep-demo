@@ -4,6 +4,7 @@ import com.pushtechnology.diffusion.api.message.TopicMessage;
 import com.pushtechnology.diffusion.api.publisher.Publisher;
 import com.pushtechnology.diffusion.api.topic.Topic;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -19,7 +20,12 @@ public class HeatSensor implements Runnable {
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private final ConcurrentMap<String, Double> prevTemps = new ConcurrentHashMap<String, Double>();
-    private final TreeMap<Double, String> currentTemps = new TreeMap();
+    private final TreeMap<Double, String> currentTemps = new TreeMap(new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return -((Double)o1).compareTo((Double)o2);
+        }
+    });
 
     private final Publisher publisher;
     private final String[] rooms;
@@ -45,6 +51,10 @@ public class HeatSensor implements Runnable {
 
     public void run() {
         try {
+            // This is essentially a hack to deal with the fact that the OEP queries
+            // treat each sensor individually and thus can result in odd heating depending
+            // on what gets processed last. By processing in temperature order
+            // coldest last we ensure that heating wins over cooling.
             currentTemps.clear();
             for (String room : rooms) {
                 if (!room.equals("Outside")) {
