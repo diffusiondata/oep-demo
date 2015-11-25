@@ -7,10 +7,6 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>dar</packaging>
 
-	<properties>
-        <DIFFUSION_HOME>/Users/Peter/Dev/Push/Diffusion/R55/build/target/5.5.7_dev/release/Diffusion5.5.7_dev</DIFFUSION_HOME>
-	</properties>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>push-repository</id>
@@ -35,7 +31,7 @@
 			<artifactId>diffusion</artifactId>
 			<version>5.5.3</version>
 			<scope>system</scope>
-			<systemPath>${DIFFUSION_HOME}/lib/diffusion.jar</systemPath>
+			<systemPath>${env.DIFFUSION_HOME}/lib/diffusion.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
