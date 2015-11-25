@@ -52,6 +52,7 @@ public class SensorsPublisher extends Publisher {
         }
 
         heatSensor = new HeatSensor(this, rooms);
+        heatSensor.setMinMax(0, 40);
         pirSensor = new PirSensor(this, rooms);
         lightSensor = new LightSensor(this, rooms);
     }
@@ -74,6 +75,7 @@ public class SensorsPublisher extends Publisher {
                 heatSensor.heaterOn(on);
             }
 
+            /*
             if (message.getTopicName().equals("Sensors/Control")) {
                 final List<String> fields = message.asFields();
                 
@@ -82,6 +84,7 @@ public class SensorsPublisher extends Publisher {
 
                 heatSensor.setMinMax(min, max);
             }
+            */
         } catch (APIException e) {
             e.printStackTrace();
         }
