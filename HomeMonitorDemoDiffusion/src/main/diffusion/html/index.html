@@ -105,10 +105,10 @@
                         <img class="hidden" id="light-switch-button" width="40" height="40" src="images/auto-off.png" onclick="lightSwitch()" />
 
                         <h5>Heating</h5>
-                        <label for="tth">Threshold High (<span id="heat-threshold-high">30</span>) </label>
+                        <label id="tth-l" for="tth">Threshold High (<span id="heat-threshold-high">30</span>) </label>
                         <input id="tth" type="range" value="30" min="0" max="40" onChange="thresholds()" onInput="heatThresholdHigh(this.value);"/>
 
-                        <label for="ttl">Threshold Low (<span id="heat-threshold-low">23</span>)</label>
+                        <label id="ttl-l" for="ttl">Threshold Low (<span id="heat-threshold-low">23</span>)</label>
                         <input id="ttl" type="range" value="23" min="0" max="40" onChange="thresholds()" onInput="heatThresholdLow(this.value);"/>
 
                         <img class="centered" id="fire" src="images/heat-off.png" />

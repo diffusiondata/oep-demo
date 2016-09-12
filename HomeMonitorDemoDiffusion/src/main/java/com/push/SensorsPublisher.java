@@ -52,6 +52,7 @@ public class SensorsPublisher extends Publisher {
         }
 
         heatSensor = new HeatSensor(this, rooms);
+        heatSensor.setMinMax(0, 40);
         pirSensor = new PirSensor(this, rooms);
         lightSensor = new LightSensor(this, rooms);
     }
@@ -65,6 +66,7 @@ public class SensorsPublisher extends Publisher {
         try {
             Topic topic = getTopic(message.getTopicName());
             topic.publishMessage(message);
+            
             if (message.getTopicName().equals("Sensors/Control/Heater")) {
                 boolean on = true;
                 if (message.asFields().get(0).equals("off")) {
@@ -73,14 +75,16 @@ public class SensorsPublisher extends Publisher {
                 heatSensor.heaterOn(on);
             }
 
-            if (message.getTopicName().equals("sesnsor/Control")) {
+            /*
+            if (message.getTopicName().equals("Sensors/Control")) {
                 final List<String> fields = message.asFields();
                 
-                final Integer min = Integer.valueOf(fields.get(0));
-                final Integer max = Integer.valueOf(fields.get(1));
+                final Integer min = Integer.valueOf(fields.get(1));
+                final Integer max = Integer.valueOf(fields.get(2));
 
                 heatSensor.setMinMax(min, max);
             }
+            */
         } catch (APIException e) {
             e.printStackTrace();
         }

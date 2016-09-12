@@ -1,34 +1,47 @@
 package com.push;
 
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pushtechnology.diffusion.api.message.TopicMessage;
 import com.pushtechnology.diffusion.api.publisher.Publisher;
 import com.pushtechnology.diffusion.api.topic.Topic;
 
-public class HeatSensor implements Runnable {
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-    private static final Logger log = LoggerFactory.getLogger(HeatSensor.class);
-    private static Random random = new Random(System.currentTimeMillis());
-    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private double lastTemp = 15;
-    private double trend = -1;
+public class HeatSensor implements Runnable {
+    private static final Random RANDOM = new Random(System.currentTimeMillis());
+    private static final int MAX_TEMP = 40;
+
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final ConcurrentMap<String, Double> prevTemps = new ConcurrentHashMap<String, Double>();
+    private final TreeMap<Double, String> currentTemps = new TreeMap(new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            return -((Double)o1).compareTo((Double)o2);
+        }
+    });
 
     private final Publisher publisher;
     private final String[] rooms;
 
+    private volatile double trend = -1;
     private volatile int min = 10;
     private volatile int max = 30;
 
     public HeatSensor(Publisher publisher, String... rooms) {
         this.publisher = publisher;
         this.rooms = rooms;
+
+        for (String room : rooms) {
+            prevTemps.put(room, (double) 15);
+        }
+
         executor.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
     }
 
@@ -38,27 +51,39 @@ public class HeatSensor implements Runnable {
 
     public void run() {
         try {
+            // This is essentially a hack to deal with the fact that the OEP queries
+            // treat each sensor individually and thus can result in odd heating depending
+            // on what gets processed last. By processing in temperature order
+            // coldest last we ensure that heating wins over cooling.
+            currentTemps.clear();
             for (String room : rooms) {
                 if (!room.equals("Outside")) {
-                    Double v = readValue();
-                    Topic topic = publisher.getTopic("Sensors/Readings/Temp/" + room);
-
-                    TopicMessage message = topic.createDeltaMessage();
-                    message.putRecord(v.toString());
-                    publisher.publishMessage(message);
+                    final Double value = readValue(room);
+                    currentTemps.put(value, room);
                 }
             }
-        } catch (Exception e) {
+
+            for (Map.Entry entry : currentTemps.entrySet()) {
+                final Topic topic = publisher.getTopic("Sensors/Readings/Temp/" + entry.getValue());
+
+                final TopicMessage message = topic.createDeltaMessage();
+                message.putRecord(entry.getKey().toString());
+
+                publisher.publishMessage(message);
+            }
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void heaterOn(boolean on) {
         if (on) {
-            log.debug("Heating on");
+            System.out.println("Heating on");
             trend = 1;
-        } else {
-            log.debug("Heating off");
+        }
+        else {
+            System.out.println("Heating off");
             trend = -1;
         }
     }
@@ -68,21 +93,31 @@ public class HeatSensor implements Runnable {
         this.max = max;
     }
 
-    public double readValue() {
-        double variation = random.nextInt(50) / 10d;
+    public double readValue(String room) {
+        final double variation = (RANDOM.nextInt(50) / 10d) - 1;
+        final double prev = prevTemps.get(room);
 
-        double newTemp = lastTemp + (trend * variation);
+        double newTemp = prev + (trend * variation);
 
+        // Clamp all temperatures to an absolute maximum
+        if (newTemp > MAX_TEMP) {
+            newTemp = MAX_TEMP;
+        }
+
+        // When temperatures hit threshold min/max values, clamp prev values 
+        // to ensure they hover around them
         if (newTemp < min) {
-            newTemp = min;
-        } else if (newTemp > max) {
-            newTemp = max;
+            prevTemps.replace(room, prev, (double) min);
+            newTemp++;
+        }
+        else if (newTemp > max) {
+            prevTemps.replace(room, prev, (double) max);
+            newTemp--;
+        }
+        else {
+            prevTemps.replace(room, prev, newTemp);
         }
 
-        if (random.nextInt(max) == 1) {
-            lastTemp = newTemp;
-        }
         return newTemp;
     }
-
 }

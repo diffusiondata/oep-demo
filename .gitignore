@@ -1,2 +1,7 @@
 /target
 publisher.zip
+.classpath
+.project
+.metadata
+.settings
+.recommenders
