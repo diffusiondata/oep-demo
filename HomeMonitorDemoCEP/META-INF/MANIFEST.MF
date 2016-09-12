@@ -5,7 +5,7 @@ Bundle-SymbolicName: SmartHome
 Bundle-Version: 1.0.0
 Bundle-Localization: bundle
 Bundle-Vendor: %project.vendor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: lib/diffusion-client.jar,
  .
 Export-Package: com.oracle.smarthome.cep;version="1.0.0"
@@ -29,4 +29,13 @@ Import-Package: com.bea.wlevs.configuration;version="11.1.1",
  org.springframework.osgi.context;version="1.2.0",
  org.springframework.osgi.extensions.annotation;version="1.2.0",
  org.springframework.osgi.service;version="1.2.0",
- org.springframework.util;version="2.5.6"
+ org.springframework.util;version="2.5.6",
+ com.sun.xml.bind;version="1.2.1.0_2-1-7",com.sun.xml.bind.annotation;version="1.2.1.0_2-1-7",
+ com.sun.xml.bind.api;version="1.2.1.0_2-1-7",com.sun.xml.bind.marshaller;version="1.2.1.0_2-1-7",
+ com.sun.xml.bind.unmarshaller;version="1.2.1.0_2-1-7",com.sun.xml.bind.v2;version="1.2.1.0_2-1-7",
+ com.sun.xml.bind.v2.model.nav;version="1.2.1.0_2-1-7",com.sun.xml.bind.v2.runtime;version="1.2.1.0_2-1-7",
+ com.sun.xml.bind.v2.schemagen;version="1.2.1.0_2-1-7",com.sun.xml.txw2;version="1.2.1.0_2-1-7",
+ com.sun.xml.txw2.annotation;version="1.2.1.0_2-1-7",com.sun.xml.txw2.output;version="1.2.1.0_2-1-7",
+ commonj.timers,javax.xml.bind,javax.xml.bind.annotation,javax.xml.bind.annotation.adapters,
+ javax.xml.bind.util,javax.xml.datatype,javax.xml.namespace,javax.xml.transform,
+ javax.xml.transform.stream,javax.xml.validation
